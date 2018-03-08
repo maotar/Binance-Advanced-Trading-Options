@@ -24,18 +24,19 @@ Download the file structure to a local folder and run start.ahk
 ## Usage ##
 1. Trailing Stop
 
-   Trader will track and compare the current ask price against the highest ask price since activation, if the difference is
+   Trader will track and compare the current ask price against the highest ask price since execution, if the difference is
    greater than the percentage set in options a market sell order will be placed.
 
    Fields:
-   * Symbol (required), enter full trade pair name like BNBBTC or BNBETH, will be validated against currently available pairs.
-   * Amount (required), the quantity of coins to buy, currently does not accept fractional numbers, only full coins
+   * Symbol (required), enter full trade pair name like BNBBTC or BNBETH, will be validated against currently available pairs 
+     (list gets updated every 3 minutes)
+   * Amount (required), the quantity of coins to buy, currently fractional numbers are not supported, only full coins
    * Start Price (Optional, activated through checkbox next to input field), advanced feature, trader will wait to enter the 
-     position until start price is reached
+     position until current ask price is equal or above start price specified
    * Trail % (required), percentage difference compared to highest price till sell order is triggered
-   * Ratio (required, set to 0 if not), advanced feature, percentage increase of Trail % per percent profit compared to enter 
-     price, think of it as adaptive trail percentage (e.g. Trail % = 1, Ratio = 0.2, current profit = 3%, effective trail 
-     percentage = 1.6%)
+   * Ratio (required, set to 0 if not desired), advanced feature, percentage increase of Trail % per percent profit compared to
+     enter price, think of it as adaptive trail percentage (e.g. Trail % = 1, Ratio = 0.2, current profit = 3.1%, effective
+     trail percentage = 1.6%)
    * Confirmations (required), trader will track current ask price every second, after the amount of confirmations (seconds 
      where sell condition will be met) the sell order will be placed, think of it as the sensitivity of the trailing stop
 
@@ -45,8 +46,9 @@ Download the file structure to a local folder and run start.ahk
    equal or lower a market sell order will be placed
    
    Fields:
-   * Symbol (required), enter full trade pair name like BNBBTC or BNBETH, will be validated against currently available pairs.
-   * Amount (required), the quantity of coins to buy, currently does not accept fractional numbers, only full coins
+   * Symbol (required), enter full trade pair name like BNBBTC or BNBETH, will be validated against currently available pairs 
+     (list gets updated every 3 minutes)
+   * Amount (required), the quantity of coins to buy, currently fractional numbers are not supported, only full coins
    * Stop Price (required), the price at which the sell order will be placed if current ask price is equal or lower than this
      value
    * Confirmations (required), trader will track current ask price every second, after the amount of confirmations (seconds 
