@@ -20,8 +20,8 @@ Additional trading options for the Binance Cryptocurrency exchange, current orde
 Download the file structure to a local folder and run start.ahk
 
 ## Usage ##
-
 1. Trailing Stop
+
    Trader will track and compare the current ask price against the highest ask price since activation, if the difference is
    greater than the percentage set in options a market sell order will be placed.
 
@@ -36,5 +36,32 @@ Download the file structure to a local folder and run start.ahk
      percentage = 1.6%)
    * Confirmations (required), trader will track current ask price every second, after the amount of confirmations (seconds 
      where sell condition will be met) the sell order will be placed, think of it as the sensitivity of the trailing stop
+
 2. Stop-Market
+
+   Trader will track and compare the current ask price against the price set in 'Stop Price' field, if the current ask price is
+   equal or lower a market sell order will be placed
+   
+   Fields:
+   * Symbol (required), enter full trade pair name like BNBBTC or BNBETH, will be validated against currently available pairs.
+   * Amount (required), the quantity of coins to buy, currently does not accept fractional numbers, only full coins
+   * Stop Price (required), the price at which the sell order will be placed if current ask price is equal or lower than this
+     value
+   * Confirmations (required), trader will track current ask price every second, after the amount of confirmations (seconds 
+     where sell condition will be met) the sell order will be placed, think of it as the sensitivity of the trailing stop
+     
+### Modes:
+
+1. Real
+
+   Trader will execute both buy order and sell order
+2. Test
+
+   Trader will not execute any buy or sell order
+3. Reset
+
+   Trader will not execute buy order but will execute sell order if conditions are met, use to reset the counter or to use the
+   trading option for coins already bought with the Binance integrated trading options
+
+
 
