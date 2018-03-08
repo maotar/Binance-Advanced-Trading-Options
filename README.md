@@ -2,6 +2,8 @@
 
 Currently under development, trading not available.
 
+![alt text](https://i.imgur.com/K8kGKOB.png "GUI")
+
 Status :
 
 * 7-March-2018 - Initial commit, GUI available for feedback/testing
