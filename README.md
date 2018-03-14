@@ -10,27 +10,36 @@ Status :
 
 ## Introduction ##
 
-Additional trading options for the Binance Cryptocurrency exchange, current order types available are 'Trailing Stop' and 'Stop-Market'.
+Additional trading options for the Binance Cryptocurrency exchange, current order types available are 'Trailing Stop' and 'Stop-Market'. GUI is provided to set and execute trades, for each trade a seperate trader console window will be opened that will do the tracking and will execute the buy and/or sell orders
 
 **Use at your own risk! Use the test mode until you are comfortable to make a real trade**
 
+**The program runs client side, if your computer is turned off or rebooted the stops will no longer be active, Windows 10 automatic updates will forcefully reboot your PC so make sure to turn it off if you have trades running for longer periods** 
+
 ## Requirements ##
 
-* Python 3.6, pip install twisted, pip install python-binance
+* Python 3.6
+* Python modules python-binance, colorama, pywin32, pynput (open CMD prompt as administrator and execute 'pip install 
+  insertmodulename' for each module)
 * Autohotkey, https://autohotkey.com/download/
 
-Download the file structure to a local folder and run start.ahk
+Download the file structure to a local folder, open trader.py from Resources\Python folder and put in your Binance API keys.
 
-## Usage ##
+(Optional) To receive Telegram notification when a stop is triggered enter your Telegram API key and conversation ID in trader.py
+
+Start the application by running start.ahk
+
+## GUI Usage ##
 1. Trailing Stop
 
-   Trader will track and compare the current ask price against the highest ask price since execution, if the difference is
-   greater than the percentage set in options a market sell order will be placed.
+   Trader will track and compare the current bid price against the highest bid price since execution, if the difference is
+   equal or greater than the percentage set in options a market sell order will be placed.
 
    Fields:
    * Symbol (required), enter full trade pair name like BNBBTC or BNBETH, will be validated against currently available pairs 
      (list gets updated every 3 minutes)
-   * Amount (required), the quantity of coins to buy, currently fractional numbers are not supported, only full coins
+   * Amount (required), the quantity of coins to buy, fractional numbers are supported, digits beyond the allowed precision for
+     the symbol will be ignored
    * Start Price (Optional, activated through checkbox next to input field), advanced feature, trader will wait to enter the 
      position until current ask price is equal or above start price specified
    * Trail % (required), percentage difference compared to highest price till sell order is triggered
@@ -42,16 +51,17 @@ Download the file structure to a local folder and run start.ahk
 
 2. Stop-Market
 
-   Trader will track and compare the current ask price against the price set in 'Stop Price' field, if the current ask price is
+   Trader will track and compare the current bid price against the price set in 'Stop Price' field, if the current bid price is
    equal or lower a market sell order will be placed
    
    Fields:
    * Symbol (required), enter full trade pair name like BNBBTC or BNBETH, will be validated against currently available pairs 
      (list gets updated every 3 minutes)
-   * Amount (required), the quantity of coins to buy, currently fractional numbers are not supported, only full coins
-   * Stop Price (required), the price at which the sell order will be placed if current ask price is equal or lower than this
-     value
-   * Confirmations (required), trader will track current ask price every second, after the amount of confirmations (seconds 
+   * Amount (required), the quantity of coins to buy, fractional numbers are supported, digits beyond the allowed precision for
+     the symbol will be ignored
+   * Stop Price (required), the price at which the sell order will be placed if current bid price is equal or lower than this
+     value (make sure this is set lower than current bid price, stop profit not (yet) supported)
+   * Confirmations (required), trader will track current bid price every second, after the amount of confirmations (seconds 
      where sell condition will be met) the sell order will be placed, think of it as the sensitivity of the trailing stop
      
 ### Modes:
@@ -64,8 +74,9 @@ Download the file structure to a local folder and run start.ahk
    Trader will not execute any buy or sell order
 3. Reset
 
-   Trader will not execute buy order but will execute sell order if conditions are met, use to reset the counter or to use the
-   trading option for coins already bought with the Binance integrated trading options
+   Trader will not execute buy order but will execute sell order if stop conditions are met, use to use the
+   trading option for coins already bought with the Binance default trading options. Make sure your Binance account balance for
+   the symbol is sufficient for the amount specified or the sell order will fail
 
 
 
