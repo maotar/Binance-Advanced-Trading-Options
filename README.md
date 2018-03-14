@@ -12,7 +12,7 @@ Status :
 
 Additional trading options for the Binance Cryptocurrency exchange, current order types available are 'Trailing Stop' and 'Stop-Market'. GUI is provided to set and execute trades, for each trade a seperate trader console window will be opened that will do the tracking and will execute the buy and/or sell orders
 
-**Use at your own risk! Use the test mode until you are comfortable to make a real trade**
+**Use at your own risk! Read all the information below carefully and use the test mode until you are comfortable to make a real trade**
 
 **The program runs client side, if a trader window is closed or your computer is turned off or rebooted the stops will no longer be active, Windows 10 automatic updates will forcefully reboot your PC so make sure to disable this 'feature' if you have trades running for longer periods, consider setting Binance default stop-limit under stop price/percentage to act as safety net** 
 
