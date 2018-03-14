@@ -126,4 +126,11 @@ Trader will perform the (simulated) sell order, display the results in console a
 2. Test
    Trader will show result of simulated sell order based on the bid price at the time of stop trigger
 
+### Stop-Market:
+
+Same as Trailing stop exept for the info displayed in tracking mode :
+
+![alt text](https://i.imgur.com/uBTB1WM.png "Trader")
+
+SYMBOL || [c] (current bid price) || [s] (stop price)|| [p/l] profit/loss %
 
