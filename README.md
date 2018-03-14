@@ -14,7 +14,7 @@ Additional trading options for the Binance Cryptocurrency exchange, current orde
 
 **Use at your own risk! Use the test mode until you are comfortable to make a real trade**
 
-**The program runs client side, if a trader window is closed or your computer is turned off or rebooted the stops will no longer be active, Windows 10 automatic updates will forcefully reboot your PC so make sure to disable this 'feature' if you have trades running for longer periods** 
+**The program runs client side, if a trader window is closed or your computer is turned off or rebooted the stops will no longer be active, Windows 10 automatic updates will forcefully reboot your PC so make sure to disable this 'feature' if you have trades running for longer periods, consider setting Binance default stop-limit under stop price/percentage to act as safety net** 
 
 ## Requirements ##
 
