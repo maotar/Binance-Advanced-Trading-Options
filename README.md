@@ -18,7 +18,7 @@ Additional trading options for the Binance Cryptocurrency exchange, current orde
 
 ## Requirements ##
 
-* Python 3.6
+* Python 3.6, https://www.python.org/downloads/release/python-364/
 * Python modules python-binance, colorama, pywin32, pynput (open CMD prompt as administrator and execute 'pip install 
   insertmodulename' for each module)
 * Autohotkey, https://autohotkey.com/download/
