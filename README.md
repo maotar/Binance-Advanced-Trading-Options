@@ -115,6 +115,15 @@ SYMBOL || [c] (current bid price) || [h] (highest bid price) || [etp] (effective
 * [p/l] Percentage total profit/loss, will be measured from the (simulated) buy order therefore taking in account the spread and 
   will take in account the fees for buy and sell order for Real and Test mode, and only sell order fees for Reset mode
    
+Trade stop:
 
+Trader will perform the (simulated) sell order, display the results in console and if configured will send Telegram message. 
+
+1. Real/Reset
+   Trader will execute and show the details of the sell order and will display the re-calculated total profit/loss based on the
+   weighted average of the sell order fills, as the sell order is a market order the profit/loss percentage can be lower than
+   the p/l indicated in the tracker at the time the stop is triggered.
+2. Test
+   Trader will show result of simulated sell order based on the bid price at the time of stop trigger
 
 
