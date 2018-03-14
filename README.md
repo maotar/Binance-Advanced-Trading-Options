@@ -86,7 +86,6 @@ For each executed trade a seperate console window will be opened that shows the 
 
 ![alt text](https://i.imgur.com/bNzZlcV.png "Trader")
 
-[Imgur](https://i.imgur.com/bNzZlcV.png)
 
 Trade start:
 
