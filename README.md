@@ -101,6 +101,9 @@ Tracking:
 The trader will display the tracking information refreshing every second in the below format
 
 SYMBOL || [c] (current bid price) || [h] (highest price) || [etp] (effective trail %) || [ctp] (current trail% || [p/l] profit/loss %
+
+* [etp] The effective trail percentage based on the Trail % set in GUI, the Ratio set in GUI and manual adjustment (**if trader
+  window is active you can adjust the etp on the fly by using the up and down arrows on your keyboard**)
    
 
 
