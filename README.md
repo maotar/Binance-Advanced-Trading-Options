@@ -100,10 +100,17 @@ Tracking:
 
 The trader will display the tracking information refreshing every second in the below format
 
-SYMBOL || [c] (current bid price) || [h] (highest price) || [etp] (effective trail %) || [ctp] (current trail% || [p/l] profit/loss %
+SYMBOL || [c] (current bid price) || [h] (highest bid price) || [etp] (effective trail %) || [ctp] (current trail %) || [p/l] profit/loss %
 
 * [etp] The effective trail percentage based on the Trail % set in GUI, the Ratio set in GUI and manual adjustment (**if trader
   window is active you can adjust the etp on the fly by using the up and down arrows on your keyboard**)
+
+* [ctp] The difference between the highest bid price and current bid price, if equal or lower than the effective trail      
+  tracking line will be displayed in yellow until the amount of confirmations is reached after which (simulated) sell order will
+  be placed
+  
+* [p/l] Percentage total profit/loss, will be measured from the (simulated) buy order therefore taking in account the spread and 
+  will take in account the fees for buy and sell order for Real and Test mode, and only sell order fees for Reset mode
    
 
 
