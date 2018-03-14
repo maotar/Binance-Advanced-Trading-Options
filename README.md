@@ -78,5 +78,30 @@ Start the application by running start.ahk
    trading option for coins already bought with the Binance default trading options. Make sure your Binance account balance for
    the symbol is sufficient for the amount specified or the sell order will fail
 
+## Trader Usage ##
+
+For each executed trade a seperate console window will be opened that shows the tracking information and buy/sell order results, what will be displayed depends on the order type and mode :
+
+### Trailing Stop:
+
+Trade start:
+
+1. Real
+
+   If succesful the trader will display the amount of coins purchased (can be lower than set amount if fee asset is not set to
+   BNB or if BNB balance is not sufficient) and the weighted average price of the fills for the order
+2. Test
+
+   Trader will display the current **ask** price it will start tracking profit/loss percentage from simulating a market buy.
+3. Reset
+   Trader will display the current **bid** price it will start tracking profit/loss percentage from
+   
+Tracking:
+
+The trader will display the tracking information refreshing every second in the below format
+
+SYMBOL || [c] (current bid price) || [h] (highest price) || [etp] (effective trail %) || [ctp] (current trail% || [p/l] profit/loss %
+   
+
 
 
