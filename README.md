@@ -16,6 +16,8 @@ Additional trading options for the Binance Cryptocurrency exchange, current orde
 
 **The program runs client side, if a trader window is closed or your computer is turned off or rebooted the stops will no longer be active, Windows 10 automatic updates will forcefully reboot your PC so make sure to disable this 'feature' if you have trades running for longer periods, consider setting Binance default stop-limit under stop price/percentage to act as safety net** 
 
+**Windows has a feature for console windows that will pause execution when mouseclick is done in the window to enable text copy/paste from the window, of course we don't want this to happen when the trader is running, To disable this feature right click the title bar of a console window (can be as test trader or regular CMD window), choose 'Defaults' and then uncheck the 'Quick Edit' checkbox. Any future console window will now open without the quick edit feature enabled**
+
 ## Requirements ##
 
 * Python 3.6, https://www.python.org/downloads/release/python-364/
