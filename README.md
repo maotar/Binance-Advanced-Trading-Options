@@ -10,13 +10,13 @@ Status :
 
 ## Introduction ##
 
-Additional trading options for the Binance Cryptocurrency exchange, current order types available are 'Trailing Stop' and 'Stop-Market'. GUI is provided to set and execute trades, for each trade a seperate trader console window will be opened that will do the tracking and will execute the buy and/or sell orders
+Additional trading options for the Binance cryptocurrency exchange, current order types available are 'Trailing Stop' and 'Stop-Market'. GUI is provided to set and execute trades, for each trade a seperate trader console window will be opened that will do the tracking and will execute the buy and/or sell orders.
 
 **Use at your own risk! Read all the information below carefully and use the test mode until you are comfortable to make a real trade**
 
-**The program runs client side, if a trader window is closed or your computer is turned off or rebooted the stops will no longer be active, Windows 10 automatic updates will forcefully reboot your PC so make sure to disable this 'feature' if you have trades running for longer periods, consider setting Binance default stop-limit under stop price/percentage to act as safety net** 
+**The application runs client side, if a trader window is closed or your computer is turned off or rebooted the stops will no longer be active, Windows 10 automatic updates are known to forcefully reboot your PC at times so make sure to disable this 'feature' if you have trades running for longer periods, consider setting Binance default stop-limit under stop price/percentage to act as safety net** 
 
-**Windows has a feature for console windows that will pause execution when mouseclick is done in the window to enable text copy/paste from the window, of course we don't want this to happen when the trader is running, To disable this feature right click the title bar of a console window (can be as test trader or regular CMD window), choose 'Defaults' and then uncheck the 'Quick Edit' checkbox. Any future console window will now open without the quick edit feature enabled**
+**Windows has a feature for console windows that will pause execution when mouseclick is done in the window to enable text copy/paste from the window, of course we don't want this to happen when the trader is running, To disable this feature right click the title bar of any console window (can be a test trader or regular CMD window), choose 'Defaults' and then uncheck the 'Quick Edit' checkbox. Any future console window will now open without the quick edit feature enabled**
 
 ## Requirements ##
 
@@ -25,13 +25,20 @@ Additional trading options for the Binance Cryptocurrency exchange, current orde
   insertmodulename' for each module)
 * Autohotkey, https://autohotkey.com/download/
 
-Download the file structure to a local folder, open trader.py from Resources\Python folder and put in your Binance API keys.
+Download the file structure to a local folder.
 
-(Optional) To receive Telegram notification when a stop is triggered enter your Telegram API key and conversation ID in trader.py
+(Optional) To receive Telegram notification when a stop is triggered enter your Telegram API key and conversation ID in Resources\Python\trader.py
 
 Start the application by running start.ahk
 
 ## GUI Usage ##
+
+### API Connection
+
+When the application is started the first window will ask for the keys necessary to connect to the Binance API, this way we make sure that the keys are only stored in the computer's memory and not in any plain text file on the computer. Will this stop the NSA from retrieving them if they really want to? No, but it will make it a whole lot harder for 99.99% of other hackers. In general make sure to never enable withdrawals for an API key pair, restrict them to the public IP of the computer(s) you will be using them from and periodically delete and generate a new ones.
+
+### Main GUI
+
 1. Trailing Stop
 
    Trader will track and compare the current bid price against the highest bid price since execution, if the difference is
@@ -54,7 +61,7 @@ Start the application by running start.ahk
 2. Stop-Market
 
    Trader will track and compare the current bid price against the price set in 'Stop Price' field, if the current bid price is
-   equal or lower a market sell order will be placed
+   equal or lower a market sell order will be placed.
    
    Fields:
    * Symbol (required), enter full trade pair name like BNBBTC or BNBETH, will be validated against currently available pairs 
@@ -103,7 +110,7 @@ Trade start:
    
 Tracking:
 
-The trader will display the tracking information refreshing every second in the below format
+The trader will display the tracking information refreshing every second in the below format:
 
 SYMBOL || [c] (current bid price) || [h] (highest bid price) || [etp] (effective trail %) || [ctp] (current trail %) || [p/l] profit/loss %
 
