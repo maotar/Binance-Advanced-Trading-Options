@@ -35,7 +35,11 @@ Start the application by running start.ahk
 
 ### API Connection
 
+![alt text](https://i.imgur.com/Nh24BeQ.png "GUI")
+
 When the application is started the first window will ask for the keys necessary to connect to the Binance API, this way we make sure that the keys are only stored in the computer's memory and not in any plain text file on the computer. Will this stop the NSA from retrieving them if they really want to? No, but it will make it a whole lot harder for 99.99% of other hackers. In general make sure to never enable withdrawals for an API key pair, restrict their use to the public IP of the computer(s) you will be using them from and periodically delete and generate a new ones.
+
+If you just want to try out the application in test mode (real and reset trade modes will be disabled) you can leave the API key fields empty and check the 'Test Mode' checkbox.
 
 ### Main GUI
 
