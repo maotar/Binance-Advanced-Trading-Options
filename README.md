@@ -27,7 +27,7 @@ Additional trading options for the Binance cryptocurrency exchange, current orde
 
 Download the file structure to a local folder.
 
-(Optional) To receive Telegram notification when a stop is triggered enter your Telegram API key and conversation ID in Resources\Python\trader.py
+(Optional) To receive Telegram notifications when a stop is triggered enter your Telegram API key and conversation ID in Resources\Python\trader.py (https://www.forsomedefinition.com/automation/creating-telegram-bot-notifications/)
 
 Start the application by running start.ahk
 
