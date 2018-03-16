@@ -14,6 +14,8 @@ Additional trading options for the Binance cryptocurrency exchange, current orde
 
 **Use at your own risk! Read all the information below carefully and use the test mode until you are comfortable to make a real trade.**
 
+**Make sure to never enable withdrawals for a Binance API key pair, restrict their use to the public IP of the computer(s) you will be using them from and periodically delete and generate a new ones.**
+
 **The application runs client side, if a trader window is closed or if your computer is turned off or rebooted the stops will no longer be active, Windows 10 automatic updates are known to forcefully reboot your PC at times so make sure to disable this 'feature' if you have trades running for longer periods, consider setting Binance default stop-limit under stop price/percentage to act as safety net.** 
 
 **Windows has a feature for console windows that will pause execution when mouseclick is done in the window to enable text copy/paste from the window, of course we don't want this to happen when the trader is running, To disable this feature right click the title bar of any console window (can be a test trader or regular CMD window), choose 'Defaults' and then uncheck the 'Quick Edit' checkbox. Any future console/trader window will now open without the quick edit feature enabled.**
@@ -27,19 +29,22 @@ Additional trading options for the Binance cryptocurrency exchange, current orde
 
 Download the file structure to a local folder.
 
-(Optional) To receive Telegram notifications when a stop is triggered enter your Telegram API key and conversation ID in Resources\Python\trader.py (https://www.forsomedefinition.com/automation/creating-telegram-bot-notifications/)
-
 Start the application by running start.ahk
 
 ## GUI Usage ##
 
 ### API Connection
 
-![alt text](https://i.imgur.com/Nh24BeQ.png "GUI")
+![alt text](https://i.imgur.com/2QUWnHY.png)
 
-When the application is started the first window will ask for the keys necessary to connect to the Binance API, this way we make sure that the keys are only stored in the computer's memory and not in any plain text file on the computer. Will this stop the NSA from retrieving them if they really want to? No, but it will make it a whole lot harder for 99.99% of other hackers. In general make sure to never enable withdrawals for an API key pair, restrict their use to the public IP of the computer(s) you will be using them from and periodically delete and generate a new ones.
+When the application starts for the first time it will ask for the keys necessary to connect to the Binance API and/or Telegram API, all keys will be AES encrypted and can only be decrypted with the encryption password set in this dialog (password is not stored anywhere, if you lose it or want to reconfigure the connection settings just delete the hashes.txt file in Resources\Text\). On future application startups only the decryption password will need to be entered:
 
-If you just want to try out the application in test mode (real and reset trade modes will be disabled) you can leave the API key fields empty and check the 'Test Mode' checkbox.
+![alt text](https://i.imgur.com/PVkddut.png)
+
+
+If you leave both the 'Enable Trade Mode' and 'Enable Telegram' checkboxes unchecked and click 'Submit' the application will launch in Test mode requiring no API keys.
+
+For information how to set up Telegram for notifications check here: https://www.forsomedefinition.com/automation/creating-telegram-bot-notifications/
 
 ### Main GUI
 
