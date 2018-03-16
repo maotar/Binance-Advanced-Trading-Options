@@ -58,7 +58,7 @@ For information how to set up Telegram for notifications check here: https://www
      (list gets updated every 3 minutes)
    * Amount (required), the quantity of coins to buy, fractional numbers are supported, digits beyond the allowed precision for
      the symbol will be ignored
-   * Start Price (Optional, activated through checkbox next to input field), advanced feature, trader will wait to enter the 
+   * Start Price (optional, activated through checkbox next to input field), advanced feature, trader will wait to enter the 
      position until the start price is met. If set above ask price at time of execution it will wait until the current ask price
      is higher or equal than the specified start price (could be used to trigger buy on potential breakout). If set below ask
      price at time of execution it will wait until the current ask price is lower or equal than the specified start price (could
