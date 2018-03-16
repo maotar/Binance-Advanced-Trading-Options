@@ -96,8 +96,8 @@ For information how to set up Telegram for notifications check here: https://www
 3. Reset
 
    Trader will not execute buy order but will execute sell order if stop conditions are met, use to use the
-   trading option for coins already bought with the Binance default trading options. Make sure your Binance account balance for
-   the symbol is sufficient for the amount specified or the sell order will fail
+   trading option for coins already bought with the Binance default trading options. Trader will check balances before starting
+   tracking to make sure they are sufficient to fulfill sell order.
 
 ## Trader Usage ##
 
