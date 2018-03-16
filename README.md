@@ -14,7 +14,7 @@ Additional trading options for the Binance cryptocurrency exchange, current orde
 
 **Use at your own risk! Read all the information below carefully and use the test mode until you are comfortable to make a real trade.**
 
-**Make sure to never enable withdrawals for a Binance API key pair, restrict their use to the public IP of the computer(s) you will be using them from and periodically delete and generate a new ones.**
+**Eventhough they will be encrypted make sure to never enable withdrawals for a Binance API key pair, restrict their use to the public IP of the computer(s) you will be using them from and periodically delete and generate a new ones.**
 
 **The application runs client side, if a trader window is closed or if your computer is turned off or rebooted the stops will no longer be active. Windows 10 automatic updates are known to forcefully reboot your PC at times so make sure to disable this 'feature' if you have trades running for longer periods, consider setting Binance default stop-limit under stop price/percentage to act as safety net.** 
 
