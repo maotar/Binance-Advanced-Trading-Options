@@ -16,7 +16,7 @@ Additional trading options for the Binance cryptocurrency exchange, current orde
 
 **Make sure to never enable withdrawals for a Binance API key pair, restrict their use to the public IP of the computer(s) you will be using them from and periodically delete and generate a new ones.**
 
-**The application runs client side, if a trader window is closed or if your computer is turned off or rebooted the stops will no longer be active, Windows 10 automatic updates are known to forcefully reboot your PC at times so make sure to disable this 'feature' if you have trades running for longer periods, consider setting Binance default stop-limit under stop price/percentage to act as safety net.** 
+**The application runs client side, if a trader window is closed or if your computer is turned off or rebooted the stops will no longer be active. Windows 10 automatic updates are known to forcefully reboot your PC at times so make sure to disable this 'feature' if you have trades running for longer periods, consider setting Binance default stop-limit under stop price/percentage to act as safety net.** 
 
 **Windows has a feature for console windows that will pause execution when mouseclick is done in the window to enable text copy/paste from the window, of course we don't want this to happen when the trader is running, To disable this feature right click the title bar of any console window (can be a test trader or regular CMD window), choose 'Defaults' and then uncheck the 'Quick Edit' checkbox. Any future console/trader window will now open without the quick edit feature enabled.**
 
