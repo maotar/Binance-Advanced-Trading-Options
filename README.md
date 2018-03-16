@@ -37,7 +37,7 @@ Start the application by running start.ahk
 
 ![alt text](https://i.imgur.com/2QUWnHY.png)
 
-When the application starts for the first time it will ask for the keys necessary to connect to the Binance API and/or Telegram API, all keys will be AES encrypted and can only be decrypted with the encryption password set in this dialog (password is not stored anywhere, if you lose it or want to reconfigure the connection settings just delete the hashes.txt file in Resources\Text\). On future application startups only the decryption password will need to be entered:
+When the application starts for the first time it will ask for the keys necessary to connect to the Binance API and/or Telegram API, all keys will be AES encrypted and can only be decrypted with the encryption password set in this dialog (password is not stored anywhere, if you lose it or want to reconfigure the connection settings just delete the hashes.txt file in Resources\Text\ and restart the application). On future application starts only the decryption password will need to be entered:
 
 ![alt text](https://i.imgur.com/PVkddut.png)
 
@@ -59,7 +59,10 @@ For information how to set up Telegram for notifications check here: https://www
    * Amount (required), the quantity of coins to buy, fractional numbers are supported, digits beyond the allowed precision for
      the symbol will be ignored
    * Start Price (Optional, activated through checkbox next to input field), advanced feature, trader will wait to enter the 
-     position until current ask price is equal or above start price specified
+     position until the start price is met. If set above ask price at time of execution it will wait until the current ask price
+     is higher or equal than the specified start price (could be used to trigger buy on potential breakout). If set below ask
+     price at time of execution it will wait until the current ask price is lower or equal than the specified start price (could
+     be used to trigger buy on potential bounce point)
    * Trail % (required), percentage difference compared to highest price till sell order is triggered
    * Ratio (required, set to 0 if not desired), advanced feature, percentage increase of Trail % per percent profit compared to
      enter price, think of it as adaptive trail percentage (e.g. Trail % = 1, Ratio = 0.2, current profit = 3.1%, effective
@@ -103,6 +106,8 @@ For each executed trade a seperate console window will be opened that shows the 
 ### Trailing Stop:
 
 ![alt text](https://i.imgur.com/bNzZlcV.png "Trader")
+
+(optional) If Start Price is specified trader will start ask price listener and wait until start price is met.
 
 
 Trade start:
