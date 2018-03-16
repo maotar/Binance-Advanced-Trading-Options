@@ -105,10 +105,11 @@ For each executed trade a seperate console window will be opened that shows the 
 
 ### Trailing Stop:
 
-![alt text](https://i.imgur.com/bNzZlcV.png "Trader")
+![alt text](https://i.imgur.com/ofdOAEL.png)
 
 (optional) If Start Price is specified trader will start ask price listener and wait until start price is met.
 
+![alt text](https://i.imgur.com/bNzZlcV.png "Trader")
 
 Trade start:
 
