@@ -7,6 +7,7 @@ Currently under development, trading not available.
 Status :
 
 * 7-March-2018 - Initial commit, GUI available for feedback/testing
+* 19-March-2018 - Trader available for testing
 
 ## Introduction ##
 
