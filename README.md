@@ -1,6 +1,6 @@
 # Binance Advanced Trading Options #
 
-Currently under development, trading not available.
+Currently under development, available for testing.
 
 ![alt text](https://i.imgur.com/K8kGKOB.png "GUI")
 
@@ -8,6 +8,7 @@ Status :
 
 * 7-March-2018 - Initial commit, GUI available for feedback/testing
 * 19-March-2018 - Trader available for testing
+* 23-March-2018 - Stop-HiLo and Trailing HiLo trading types added, see below for descriptions
 
 ## Introduction ##
 
