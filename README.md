@@ -86,6 +86,45 @@ For information how to set up Telegram for notifications check here: https://www
    * Confirmations (required), trader will track current bid price every second, after the amount of confirmations (seconds 
      where sell condition will be met) the sell order will be placed, think of it as the sensitivity of the trailing stop
      
+ 3. Stop-HiLo
+
+   Trader will track and compare the current bid price against the prices set in 'High' and 'Low' field, if the current bid 
+   price is equal or lower than the 'Low' price or equal or higher than the 'High' price a market sell order will be placed.
+   
+   Fields:
+   * Symbol (required), enter full trade pair name like BNBBTC or BNBETH, will be validated against currently available pairs 
+     (list gets updated every 3 minutes)
+   * Amount (required), the quantity of coins to buy, fractional numbers are supported, digits beyond the allowed precision for
+     the symbol will be ignored
+   * High (required), the price at which the sell order will be placed if current bid price is equal or higher than this
+     value (make sure this is set higher than current bid price)
+   * Low (required), the price at which the sell order will be placed if current bid price is equal or lower than this
+     value (make sure this is set lower than current bid price)
+   * Confirmations (required), trader will track current bid price every second, after the amount of confirmations (seconds 
+     where sell condition will be met) the sell order will be placed, think of it as the sensitivity of the trailing stop
+     
+ 4. Trailing HiLo
+
+   Trader will track and compare the current bid price against the prices set in 'High' and 'Low' field, if the current bid 
+   price is equal or lower than the 'Low' price a market sell order will be placed. If the current bid price is equal or higher
+   than the 'High' price the trader will switch to Trailing Stop type using the provided settings.
+   
+   Fields:
+   * Symbol (required), enter full trade pair name like BNBBTC or BNBETH, will be validated against currently available pairs 
+     (list gets updated every 3 minutes)
+   * Amount (required), the quantity of coins to buy, fractional numbers are supported, digits beyond the allowed precision for
+     the symbol will be ignored
+   * High (required), the price at which the sell order will be placed if current bid price is equal or higher than this
+     value (make sure this is set higher than current bid price)
+   * Low (required), the price at which the sell order will be placed if current bid price is equal or lower than this
+     value (make sure this is set lower than current bid price)
+   * Trail % (required), percentage difference compared to highest price till sell order is triggered
+   * Ratio (required, set to 0 if not desired), advanced feature, percentage increase of Trail % per percent profit compared to
+     enter price, think of it as adaptive trail percentage (e.g. Trail % = 1, Ratio = 0.2, current profit = 3.1%, effective
+     trail percentage = 1.6%)  
+   * Confirmations (required), trader will track current bid price every second, after the amount of confirmations (seconds 
+     where sell condition will be met) the sell order will be placed, think of it as the sensitivity of the trailing stop
+     
 ### Modes:
 
 1. Real
