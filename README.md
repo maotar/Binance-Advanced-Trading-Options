@@ -86,7 +86,7 @@ For information how to set up Telegram for notifications check here: https://www
    * Confirmations (required), trader will track current bid price every second, after the amount of confirmations (seconds 
      where sell condition will be met) the sell order will be placed, think of it as the sensitivity of the trailing stop
      
- 3. Stop-HiLo
+3. Stop-HiLo
 
    Trader will track and compare the current bid price against the prices set in 'High' and 'Low' field, if the current bid 
    price is equal or lower than the 'Low' price or equal or higher than the 'High' price a market sell order will be placed.
@@ -103,7 +103,7 @@ For information how to set up Telegram for notifications check here: https://www
    * Confirmations (required), trader will track current bid price every second, after the amount of confirmations (seconds 
      where sell condition will be met) the sell order will be placed, think of it as the sensitivity of the trailing stop
      
- 4. Trailing HiLo
+4. Trailing HiLo
 
    Trader will track and compare the current bid price against the prices set in 'High' and 'Low' field, if the current bid 
    price is equal or lower than the 'Low' price a market sell order will be placed. If the current bid price is equal or higher
