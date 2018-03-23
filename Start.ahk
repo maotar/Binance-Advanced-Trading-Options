@@ -83,7 +83,7 @@ Gui,show, w%GuiWidth%,Binance API connection
 
 Gosub, TestCheck
 
-;GuiControl, Hide, Enable Trade Mode
+GuiControl, Hide, Enable Trade Mode
 
 return
 
