@@ -2,7 +2,7 @@
 
 Currently under development, available for testing.
 
-![alt text](https://i.imgur.com/K8kGKOB.png "GUI")
+![alt text](https://i.imgur.com/hPWZxau.png "GUI")
 
 Status :
 
