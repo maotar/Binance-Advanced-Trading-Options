@@ -192,9 +192,23 @@ Trader will perform the (simulated) sell order, display the results in console a
 
 ### Stop-Market:
 
-Same as Trailing stop exept for the info displayed in tracking mode :
+Same as Trailing stop except for the info displayed in tracking mode :
 
 ![alt text](https://i.imgur.com/uBTB1WM.png "Trader")
 
 SYMBOL || [c] (current bid price) || [s] (stop price)|| [p/l] profit/loss %
+
+### Stop-HiLo###
+
+Same as Stop-Market except for the info displayed in tracking mode :
+
+![alt text](https://i.imgur.com/98se8jO.png "Stop-HiLo")
+
+SYMBOL || [c] (current bid price) || [hi] (High stop price)|| [lo] (Low stop price)|| [p/l] profit/loss %
+
+### Trailing HiLo###
+
+Combination of Stop-HiLo and Trailing Stop trader views
+
+
 
