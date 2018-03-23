@@ -199,7 +199,7 @@ Same as Trailing stop except for the info displayed in tracking mode :
 
 SYMBOL || [c] (current bid price) || [s] (stop price)|| [p/l] profit/loss %
 
-### Stop-HiLo###
+### Stop-HiLo:
 
 Same as Stop-Market except for the info displayed in tracking mode :
 
@@ -207,7 +207,7 @@ Same as Stop-Market except for the info displayed in tracking mode :
 
 SYMBOL || [c] (current bid price) || [hi] (High stop price)|| [lo] (Low stop price)|| [p/l] profit/loss %
 
-### Trailing HiLo###
+### Trailing HiLo:
 
 Combination of Stop-HiLo and Trailing Stop trader views
 
