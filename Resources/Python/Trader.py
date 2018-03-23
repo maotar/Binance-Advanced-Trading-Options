@@ -35,6 +35,8 @@ if (api_key == "empty"):
 	api_key = ""
 if (api_secret == "empty"):
 	api_secret = ""
+if order_type == "Stop-Market" and order_start_price == 0:
+	order_start_price = 999999
 
 # Fee percentages, adjust here if they are different
 
@@ -51,8 +53,12 @@ def get_url(url):
     return content
 
 def send_message(text):
-    url = URL + "sendMessage?text={}&chat_id={}".format(text, telegram_id)
-    get_url(url)
+	if len(telegram_api) > 0:
+		try:
+			url = URL + "sendMessage?text={}&chat_id={}".format(text, telegram_id)
+			get_url(url)
+		except:
+			pass    
 
 
 class currency_container:
@@ -154,8 +160,35 @@ def get_symbol_info(): # Get Binance price and qty minimum values for symbol
 
 	return (price_precision,qty_precision)
 
+def calculate_diffs(new,old,buy):
+
+	# Calculate current price difference percentage compared to highest price
+
+	price_diff = ((new - old) / old) * 100
+	price_diff = round(price_diff, 2)
+	price_diff = price_diff + 0.0 # eliminates - sign for 0.00 rounded value
+
+	# Calculate percentage total profit/loss
+
+	price_diff_total = ((new - buy) / buy) * 100
+	price_diff_total = round(price_diff_total, 2)
+	price_diff_total = price_diff_total + 0.0 # eliminates - sign for 0.00 rounded value
+
+	if commission_asset == "BNB":
+		if order_mode == "Reset":
+			price_diff_total -= (fee_bnb / 2)
+		else:
+			price_diff_total -= fee_bnb
+	else:
+		if order_mode == "Reset":
+			price_diff_total -= (fee_other / 2)
+		else:
+			price_diff_total -= fee_other
+
+	return price_diff,price_diff_total
+
 		
-def process_message_trailing_stop(msg): # Websockets listener and processing for trailing stop type
+def process_message_trailing(msg): # Websockets listener and processing for trailing stop type
 	global highest_price
 	global confirmation
 	global price_diff_int_max
@@ -171,30 +204,9 @@ def process_message_trailing_stop(msg): # Websockets listener and processing for
 			if current_price > highest_price:
 				highest_price = current_price
 
-			# Calculate current price difference percentage compared to highest price
+			# Calculate price diffs
 
-			price_diff = ((current_price - highest_price) / highest_price) * 100
-			price_diff = round(price_diff, 2)
-			price_diff = price_diff + 0.0 # eliminates - sign for 0.00 rounded value
-
-			# Calculate percentage total profit/loss
-
-			price_diff_total = ((current_price - buy_avg_price) / buy_avg_price) * 100
-			price_diff_total = round(price_diff_total, 2)
-			price_diff_total = price_diff_total + 0.0 # eliminates - sign for 0.00 rounded value
-
-			# Substract fee percentage (buy and sell) from total profit/loss percentage, if mode is 'Reset' only count selling fee
-
-			if commission_asset == "BNB":
-				if order_mode == "Reset":
-					price_diff_total -= (fee_bnb / 2)
-				else:
-					price_diff_total -= fee_bnb
-			else:
-				if order_mode == "Reset":
-					price_diff_total -= (fee_other / 2)
-				else:
-					price_diff_total -= fee_other
+			price_diff,price_diff_total = calculate_diffs(current_price,highest_price,buy_avg_price)
 
 			# Effective trail percentage calculation based on ratio
 
@@ -221,8 +233,9 @@ def process_message_trailing_stop(msg): # Websockets listener and processing for
 			if price_diff == 0:
 				price_diff_str = '[ctp]  ' +  '{0:.{precision}f}'.format(price_diff, precision='2')
 
+			# If trailing stop condition is met
 
-			if effective_trail_percentage + price_diff < 0: # If trailing stop condition is met
+			if effective_trail_percentage + price_diff < 0: 
 
 				# If amount of confirmations set is not reached print to console in yellow
 				
@@ -250,49 +263,27 @@ def process_message_trailing_stop(msg): # Websockets listener and processing for
 						except:
 							message = " Sell order for " + str(order_amount) + " " + order_symbol + " failed!\n Check your balances and sell manually if needed"
 							print(Fore.RED)
-							print(message)
-							if len(telegram_api) > 0:
-								try:							
-									send_message (message)
-								except:
-									pass
+							print(message)														
+							send_message (message)								
 							bm.close()
 							break
 
 						sell_avg_price_str = '{0:.{precision}f}'.format(sell_avg_price, precision=price_precision)
 
-						# Recalculate total profit/loss based on the actual weighted average sell price, if mode is 'Reset' only count selling fee
+						# Recalculate total profit/loss based on the actual weighted average sell price
 
-						price_diff_total = ((sell_avg_price - buy_avg_price) / buy_avg_price) * 100
-						price_diff_total = round(price_diff_total, 2)
+						price_diff,price_diff_total = calculate_diffs(sell_avg_price,highest_price,buy_avg_price)
 
-						if commission_asset == "BNB":
-							if order_mode == "Reset":
-								price_diff_total -= (fee_bnb / 2)
-							else:
-								price_diff_total -= fee_bnb
-						else:
-							if order_mode == "Reset":
-								price_diff_total -= (fee_other / 2)
-							else:
-								price_diff_total -= fee_other
-
-
+						
 					# Remove [p/l] suffix from total profit/loss percentage string
 					
 					price_diff_total_str = '{0:.{precision}f}'.format(price_diff_total, precision='2')
 
 					message = " Trailing stop for " + order_symbol + " triggered, entered at: " + buy_avg_price_str + " sold at: " + sell_avg_price_str + "\n" + " Profit/Loss(incl. fees): " + price_diff_total_str + " %"
 					print(Fore.CYAN)
-					print(message)
-
-					# Send Telegram message if API key is set
-
-					if len(telegram_api) > 0:
-						try:
-							send_message (message)
-						except:
-							pass
+					print(message)					
+					send_message (message) # Send Telegram message if API key is set
+					
 
 			else: # If trailing stop condition is not met write to console in green and reset stop confirmation count
 				print(Fore.GREEN, end=" ")								
@@ -301,38 +292,23 @@ def process_message_trailing_stop(msg): # Websockets listener and processing for
 
 
 
-def process_message_stop_market(msg): # Websockets listener and processing for trailing stop type
-	global highest_price
-	global confirmation
-	global price_diff_int_prev
+def process_message_static(msg): # Websockets listener and processing for trailing stop type
+	global confirmation	
 	for currency in msg:
 		x = currency_container(currency)
 		if(x.symbol == order_symbol): 
-			current_price = x.bid_price
+			current_price = x.bid_price			
 			
-			# Calculate percentage total profit/loss
+			price_diff,price_diff_total = calculate_diffs(current_price,1,buy_avg_price)
 
-			price_diff_total = ((current_price - buy_avg_price) / buy_avg_price) * 100
-			price_diff_total = round(price_diff_total, 2)
-			price_diff_total = price_diff_total + 0.0 # eliminates - sign for 0.00 rounded value
-
-
-			# Substract fee percentage (buy and sell) from total profit/loss percentage, if mode is 'Reset' only count selling fee
-
-			if commission_asset == "BNB":
-				if order_mode == "Reset":
-					price_diff_total -= (fee_bnb / 2)
-				else:
-					price_diff_total -= fee_bnb
-			else:
-				if order_mode == "Reset":
-					price_diff_total -= (fee_other / 2)
-				else:
-					price_diff_total -= fee_other
-
+			# Floats to strings
+			
 			current_price_str = '[c] ' + '{0:.{precision}f}'.format(current_price, precision=price_precision)
-			order_stop_price_str = '[s] ' + '{0:.{precision}f}'.format(order_stop_price, precision=price_precision)
-
+			order_start_price_str = '[hi] ' + '{0:.{precision}f}'.format(order_start_price, precision=price_precision)
+			if order_type == "Stop-Market":
+				order_stop_price_str = '[s] ' + '{0:.{precision}f}'.format(order_stop_price, precision=price_precision)
+			else:
+				order_stop_price_str = '[lo] ' + '{0:.{precision}f}'.format(order_stop_price, precision=price_precision)
 			price_diff_total_str = '[p/l] ' +  '{0:.{precision}f}'.format(price_diff_total, precision='2')	
 
 			# Add whitespace to non negative percentages to preserve consistent console output spacing
@@ -340,22 +316,39 @@ def process_message_stop_market(msg): # Websockets listener and processing for t
 			if price_diff_total >= 0:
 				price_diff_total_str = '[p/l]  ' +  '{0:.{precision}f}'.format(price_diff_total, precision='2')	
 
-			if current_price <= order_stop_price: # If trailing stop condition is met
+			# If stop condition is met		
+
+			if (current_price <= order_stop_price) or (current_price >= order_start_price): 
 
 				# If amount of confirmations set is not reached print to console in yellow
 				
 				print(Fore.YELLOW, end=" ")
-				print (x.symbol, current_price_str,order_stop_price_str,price_diff_total_str, sep = ' || ', end="\r", flush=True)				
+				if order_type == "Stop-Market":
+					print (x.symbol, current_price_str,order_stop_price_str,price_diff_total_str, sep = ' || ', end="\r", flush=True)
+				else:
+					print (x.symbol, current_price_str,order_start_price_str,order_stop_price_str,price_diff_total_str, sep = ' || ', end="\r", flush=True)				
 
 				confirmation += 1
 
 				# If amount of confirmations set is reached print to console in red, close websocket and initiate position exit
 
 				if confirmation == order_confirmations:
+					if current_price >= order_start_price:
+						trigger = 1
+					else:
+						trigger = 0
+
 					print(Fore.RED, end=" ")
-					print (x.symbol, current_price_str,order_stop_price_str,price_diff_total_str, sep = ' || ', end="\r", flush=True)	
+					if order_type == "Stop-Market":
+						print (x.symbol, current_price_str,order_stop_price_str,price_diff_total_str, sep = ' || ', end="\r", flush=True)
+					else:
+						print (x.symbol, current_price_str,order_start_price_str,order_stop_price_str,price_diff_total_str, sep = ' || ', end="\r", flush=True)	
 					print("\n")				
 					bm.close()
+
+					if order_type == "Trailing HiLo" and trigger == 1 :
+						conn_key = bm.start_ticker_socket(process_message_trailing)
+						break
 
 					# In test mode set the 'sell' price to ask price at the moment stop was triggered, in Real or Reset mode initiate market sell order
 
@@ -368,12 +361,8 @@ def process_message_stop_market(msg): # Websockets listener and processing for t
 						except:
 							message = " Sell order for " + str(order_amount) + " " + order_symbol + " failed!\n Check your balances and sell manually if needed"
 							print(Fore.RED)
-							print(message)
-							if len(telegram_api) > 0:
-								try:							
-									send_message (message)
-								except:
-									pass
+							print(message)											
+							send_message (message)								
 							bm.close()
 							break
 
@@ -381,40 +370,23 @@ def process_message_stop_market(msg): # Websockets listener and processing for t
 
 						# Recalculate total profit/loss based on the actual weighted average sell price, if mode is 'Reset' only count selling fee
 
-						price_diff_total = ((sell_avg_price - buy_avg_price) / buy_avg_price) * 100
-						price_diff_total = round(price_diff_total, 2)
-
-						if commission_asset == "BNB":
-							if order_mode == "Reset":
-								price_diff_total -= (fee_bnb / 2)
-							else:
-								price_diff_total -= fee_bnb
-						else:
-							if order_mode == "Reset":
-								price_diff_total -= (fee_other / 2)
-							else:
-								price_diff_total -= fee_other
-
-
+						price_diff,price_diff_total = calculate_diffs(sell_avg_price,1,buy_avg_price)
+						
 					# Remove [p/l] suffix from total profit/loss percentage string
 					
 					price_diff_total_str = '{0:.{precision}f}'.format(price_diff_total, precision='2')
 
-					message = " Stop-Market for " + order_symbol + " triggered, entered at: " + buy_avg_price_str + " sold at: " + sell_avg_price_str + "\n" + " Profit/Loss(incl. fees): " + price_diff_total_str + " %"
+					message = " " + order_type + " for " + order_symbol + " triggered, entered at: " + buy_avg_price_str + " sold at: " + sell_avg_price_str + "\n" + " Profit/Loss(incl. fees): " + price_diff_total_str + " %"
 					print(Fore.CYAN)
-					print(message)
-
-					# Send Telegram message if API key is set
-
-					if len(telegram_api) > 0:
-						try:							
-							send_message (message)
-						except:
-							pass
+					print(message)											
+					send_message (message)	# Send Telegram message if API key is set			   
 
 			else: # If stop market condition is not met write to console in green and reset stop confirmation count
 				print(Fore.GREEN, end=" ")				
-				print (x.symbol, current_price_str,order_stop_price_str,price_diff_total_str, sep = ' || ', end="\r", flush=True)
+				if order_type == "Stop-Market":
+					print (x.symbol, current_price_str,order_stop_price_str,price_diff_total_str, sep = ' || ', end="\r", flush=True)
+				else:
+					print (x.symbol, current_price_str,order_start_price_str,order_stop_price_str,price_diff_total_str, sep = ' || ', end="\r", flush=True)
 				confirmation = 0
 
 			
@@ -422,7 +394,7 @@ def process_message_stop_market(msg): # Websockets listener and processing for t
 
 
 if __name__ == "__main__":
-	os.system('mode con: cols=92 lines=8') # Set console window size
+	os.system('mode con: cols=92 lines=10') # Set console window size
 	console_title = order_symbol + " - " + order_type + " - " + order_mode
 	ctypes.windll.kernel32.SetConsoleTitleW(console_title) # Set console window title
 	init() # Initialize colorama
@@ -452,7 +424,7 @@ if __name__ == "__main__":
 
 	start_match = False
 
-	if order_start_price > 0:
+	if order_start_price > 0 and order_type == "Trailing Stop":
 
 		info = client.get_ticker(symbol=order_symbol)
 		start_ask = float(info.get("askPrice"))
@@ -524,13 +496,14 @@ if __name__ == "__main__":
 	
 	if order_type == "Trailing Stop":	
 		bm = BinanceSocketManager(client)
-		conn_key = bm.start_ticker_socket(process_message_trailing_stop)
+		conn_key = bm.start_ticker_socket(process_message_trailing)
+		bm.start()
+	else:
+		bm = BinanceSocketManager(client)
+		conn_key = bm.start_ticker_socket(process_message_static)
 		bm.start()
 
-	if order_type == "Stop-Market":	
-		bm = BinanceSocketManager(client)
-		conn_key = bm.start_ticker_socket(process_message_stop_market)
-		bm.start()
+	
 
 
 	# If mode is 'Reset' check if symbol balance is enough for sell order for amount requested
@@ -562,7 +535,6 @@ effective_trail_percentage = order_trail_percentage
 confirmation = 0
 
 # Keyboard listener for up/down arrow effective trail percentage adjustments
-
 
 def on_press(key):
 	global effective_trail_percentage

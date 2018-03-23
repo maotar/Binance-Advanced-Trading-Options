@@ -83,7 +83,7 @@ Gui,show, w%GuiWidth%,Binance API connection
 
 Gosub, TestCheck
 
-GuiControl, Hide, Enable Trade Mode
+;GuiControl, Hide, Enable Trade Mode
 
 return
 
@@ -342,7 +342,7 @@ Gui, Font, % (FontOptions := "s10"), % (FontName := "Verdana")
 OD_Colors.SetItemHeight(FontOptions, FontName)
 
 Gui, Add, Text, x10 y40, Order Type:
-Gui, Add, DDL, x120 y40 w130 h100 vType +border Choose1 hwndDropdown1 gSetType -E0x200 +0x0210, ---|Trailing Stop|Stop-Market
+Gui, Add, DDL, x120 y40 w130 h100 vType +border Choose1 hwndDropdown1 gSetType -E0x200 +0x0210 R5, ---|Trailing Stop|Stop-Market|Stop-HiLo|Trailing HiLo
 OD_Colors.Attach(Dropdown1, {T: 0xBCBDC0, B: 0x1A2132})
 
 Gui, Add, Text, x10 y70,  Symbol:  
@@ -351,11 +351,11 @@ Gui, Add, Edit, +border cBCBDC0 -E0x200 hwndSymbolHnwd x120 y70 w130 Uppercase v
 Gui, Add, Text, x10 y100,  Amount:
 Gui, Add, Edit, +border cBCBDC0 -E0x200 hwndAmountHnwd x120 y100 w130 vAmount
 
-Gui, Add, Text, x10 y131,  Start Price:
+Gui, Add, Text, x10 y131 vStartPriceLabel,  Start Price:
 GUI, Add, Checkbox, -E0x200 hwndStartCheck x97 y134 w13 h13 vStartCheck gSetCheck, %A_Space%
 Gui, Add, Edit, +border cBCBDC0 -E0x200 hwndStartPriceHnwd x120 y130 w130 vStartPrice
 
-Gui, Add, Text, x10 y160,  Stop Price:
+Gui, Add, Text, x10 y160 vStopPriceLabel,  Stop Price:
 Gui, Add, Edit, +border cBCBDC0 -E0x200 hwndStopPriceHnwd x120 y160 w130 vStopPrice
 
 Gui, Add, Text, x10 y190,  Trail `%:
@@ -563,6 +563,8 @@ if (Type = "Trailing Stop")
   GuiControl, Enable, TrailRatio
   GuiControl, Enable, Confirmations
   ControlSetText, Edit6, 0
+  GuiControl,, StartPriceLabel, Start Price:
+  GuiControl,, StopPriceLabel, Stop Price:
 }
 
 if (Type = "Stop-Market")
@@ -571,6 +573,33 @@ if (Type = "Stop-Market")
   GuiControl, Enable, Amount
   GuiControl, Enable, StopPrice
   GuiControl, Enable, Confirmations
+  GuiControl,, StartPriceLabel, Start Price:
+  GuiControl,, StopPriceLabel, Stop Price:
+}
+
+if (Type = "Stop-HiLo")
+{
+  GuiControl, Enable, Symbol
+  GuiControl, Enable, Amount
+  GuiControl, Enable, StartPrice
+  GuiControl, Enable, StopPrice  
+  GuiControl, Enable, Confirmations
+  GuiControl,, StartPriceLabel, High:
+  GuiControl,, StopPriceLabel, Low:
+}
+
+if (Type = "Trailing HiLo")
+{
+  GuiControl, Enable, Symbol
+  GuiControl, Enable, Amount
+  GuiControl, Enable, StartPrice
+  GuiControl, Enable, StopPrice
+  GuiControl, Enable, TrailPercentage
+  GuiControl, Enable, TrailRatio 
+  GuiControl, Enable, Confirmations
+  GuiControl,, StartPriceLabel, High: 
+  GuiControl,, StopPriceLabel, Low:
+  ControlSetText, Edit6, 0
 }
 
 return
