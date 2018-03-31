@@ -8,8 +8,7 @@ import ctypes
 import os
 from win32 import win32gui
 from pynput import keyboard
-
-
+from datetime import datetime
 from binance.websockets import BinanceSocketManager
 from binance.client import Client
 from twisted.internet import reactor
@@ -65,7 +64,39 @@ class currency_container:
 	def __init__(self, currencyArray):
 		self.symbol = currencyArray['s']
 		self.ask_price = float(currencyArray['a'])
-		self.bid_price = float(currencyArray['b'])		
+		self.bid_price = float(currencyArray['b'])	
+
+# Keyboard listener for up/down arrow effective trail percentage adjustments
+
+def on_press(key):
+	global effective_trail_percentage
+	global symbol_ticksize
+	global order_stop_price
+	global order_start_price
+	try:
+		key_pressed = '{0}'.format(key)
+		w = win32gui
+		active_window = w.GetWindowText (w.GetForegroundWindow())
+		if(active_window == console_title):
+			if key_pressed == 'Key.up':
+				effective_trail_percentage += 0.1
+				order_stop_price += float(symbol_ticksize)		
+			if key_pressed == 'Key.down':
+				effective_trail_percentage -= 0.1
+				order_stop_price -= float(symbol_ticksize)
+			if key_pressed == 'Key.left':
+				order_start_price -= float(symbol_ticksize)
+			if key_pressed == 'Key.right':
+				order_start_price += float(symbol_ticksize)
+			if key_pressed == 'Key.page_down':
+				order_start_price -= float(symbol_ticksize)
+				order_stop_price -= float(symbol_ticksize)
+			if key_pressed == 'Key.page_up':
+				order_start_price += float(symbol_ticksize)
+				order_stop_price += float(symbol_ticksize)
+
+	except:
+		pass		
 
 
 def enter_position():
@@ -158,7 +189,7 @@ def get_symbol_info(): # Get Binance price and qty minimum values for symbol
 	if qty_precision == -1:
 		qty_precision = 0
 
-	return (price_precision,qty_precision)
+	return (price_precision,qty_precision,symbol_ticksize)
 
 def calculate_diffs(new,old,buy):
 
@@ -279,10 +310,13 @@ def process_message_trailing(msg): # Websockets listener and processing for trai
 					
 					price_diff_total_str = '{0:.{precision}f}'.format(price_diff_total, precision='2')
 
-					message = " Trailing stop for " + order_symbol + " triggered, entered at: " + buy_avg_price_str + " sold at: " + sell_avg_price_str + "\n" + " Profit/Loss(incl. fees): " + price_diff_total_str + " %"
+					current_time = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
+
+					message = " " + current_time + "\n" + " Trailing stop for " + order_symbol + " triggered, entered at: " + buy_avg_price_str + " sold at: " + sell_avg_price_str + "\n" + " Profit/Loss(incl. fees): " + price_diff_total_str + " %"
+					message_telegram = "Trailing stop for " + order_symbol + " triggered," + "\n"+ "entered at: " + buy_avg_price_str + " sold at: " + sell_avg_price_str + "\n" + "Profit/Loss(incl. fees): " + price_diff_total_str + " %"
 					print(Fore.CYAN)
 					print(message)					
-					send_message (message) # Send Telegram message if API key is set
+					send_message (message_telegram) # Send Telegram message if API key is set
 					
 
 			else: # If trailing stop condition is not met write to console in green and reset stop confirmation count
@@ -293,7 +327,9 @@ def process_message_trailing(msg): # Websockets listener and processing for trai
 
 
 def process_message_static(msg): # Websockets listener and processing for trailing stop type
-	global confirmation	
+	global confirmation
+	global order_trail_percentage
+	global effective_trail_percentage
 	for currency in msg:
 		x = currency_container(currency)
 		if(x.symbol == order_symbol): 
@@ -347,6 +383,7 @@ def process_message_static(msg): # Websockets listener and processing for traili
 					bm.close()
 
 					if order_type == "Trailing HiLo" and trigger == 1 :
+						effective_trail_percentage = order_trail_percentage
 						conn_key = bm.start_ticker_socket(process_message_trailing)
 						break
 
@@ -376,10 +413,13 @@ def process_message_static(msg): # Websockets listener and processing for traili
 					
 					price_diff_total_str = '{0:.{precision}f}'.format(price_diff_total, precision='2')
 
-					message = " " + order_type + " for " + order_symbol + " triggered, entered at: " + buy_avg_price_str + " sold at: " + sell_avg_price_str + "\n" + " Profit/Loss(incl. fees): " + price_diff_total_str + " %"
+					current_time = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
+
+					message = " " + current_time + "\n" + " " + order_type + " for " + order_symbol + " triggered, entered at: " + buy_avg_price_str + " sold at: " + sell_avg_price_str + "\n" + " Profit/Loss(incl. fees): " + price_diff_total_str + " %"
+					message_telegram = order_type + " for " + order_symbol + " triggered," + "\n" + "entered at: " + buy_avg_price_str + " sold at: " + sell_avg_price_str + "\n" + "Profit/Loss(incl. fees): " + price_diff_total_str + " %"
 					print(Fore.CYAN)
 					print(message)											
-					send_message (message)	# Send Telegram message if API key is set			   
+					send_message (message_telegram)	# Send Telegram message if API key is set			   
 
 			else: # If stop market condition is not met write to console in green and reset stop confirmation count
 				print(Fore.GREEN, end=" ")				
@@ -414,7 +454,7 @@ if __name__ == "__main__":
 
 	# Call function to get Binance price and qty minimum values for symbol
 
-	price_precision,qty_precision = get_symbol_info()
+	price_precision,qty_precision,symbol_ticksize = get_symbol_info()
 
 	# Set order amount precision to allowed precision
 
@@ -534,22 +574,7 @@ effective_trail_percentage = order_trail_percentage
 
 confirmation = 0
 
-# Keyboard listener for up/down arrow effective trail percentage adjustments
-
-def on_press(key):
-	global effective_trail_percentage
-	try:
-		key_pressed = '{0}'.format(key)
-		w = win32gui
-		active_window = w.GetWindowText (w.GetForegroundWindow())
-		if(active_window == console_title):
-			if key_pressed == 'Key.up':
-				effective_trail_percentage += 0.1			
-			if key_pressed == 'Key.down':
-				effective_trail_percentage -= 0.1
-	except:
-		pass	
-
+# Start keyboard listener
 
 with keyboard.Listener(
         on_press=on_press) as listener:
