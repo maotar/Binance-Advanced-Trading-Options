@@ -209,7 +209,7 @@ Same as Stop-Market except for the info displayed in tracking mode :
 
 SYMBOL || [c] (current bid price) || [hi] (High stop price)|| [lo] (Low stop price)|| [p/l] profit/loss %
 
-(**if trader window is active you can adjust the Lo price on the fly by using the up and down arrows on your keyboard and the Hi price using the left and right arrows, use pageup and pagedown keys to adjust Hi and Lo price simultaniously effectively moving the entire price window up or down**)
+(**if trader window is active you can adjust the Lo price on the fly by using the up and down arrows on your keyboard and the Hi price using the left and right arrows, use pageup and pagedown keys to adjust Hi and Lo price simultaneously effectively moving the entire price window up or down**)
 
 ### Trailing HiLo:
 
