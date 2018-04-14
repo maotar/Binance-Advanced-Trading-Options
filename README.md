@@ -24,12 +24,12 @@ Additional trading options for the Binance cryptocurrency exchange, current orde
 
 ## Requirements ##
 
-* Python 3.6, https://www.python.org/downloads/release/python-364/
-* Python modules python-binance, colorama, pywin32, pynput (open CMD prompt as administrator and execute 'pip install 
-  *insertmodulename*' for each module)
-* Autohotkey, https://autohotkey.com/download/
-
 Download the file structure to a local folder.
+
+* Install Python 3.6, https://www.python.org/downloads/release/python-364/
+* Install Python modules python-binance, colorama, pywin32, pynput (right click the InstallPythonModules.bat file you downloaded
+  to local folder and choose 'run as administrator')
+* Install Autohotkey, https://autohotkey.com/download/
 
 Start the application by running start.ahk
 
@@ -139,6 +139,9 @@ For information how to set up Telegram for notifications check here: https://www
    Trader will not execute buy order but will execute sell order if stop conditions are met, use to use the
    trading option for coins already bought with the Binance default trading options. Trader will check balances before starting
    tracking to make sure they are sufficient to fulfill sell order.
+   
+   When 'Reset' mode is selected 'Entry Price' field will be enabled where you can enter the (average) price you entered the
+   position at, this will ensure correct display of the total profit/loss percentage in the trader.
 
 ## Trader Usage ##
 
