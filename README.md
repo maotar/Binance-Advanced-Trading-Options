@@ -15,7 +15,7 @@ client, added price entry error catching to trader
 
 ## Introduction ##
 
-Additional trading options for the Binance cryptocurrency exchange, current order types available are 'Trailing Stop' and 'Stop-Market'. GUI is provided to set and execute trades, for each trade a seperate trader console window will be opened that will do the tracking and will execute the buy and/or sell orders.
+Additional trading options for the Binance cryptocurrency exchange, current order types available are 'Trailing Stop', 'Stop-Market', 'Stop-HiLo' and 'Trailing HiLo'. GUI is provided to set and execute trades, for each trade a seperate trader console window will be opened that will do the tracking and will execute the buy and/or sell orders.
 
 **Use at your own risk! Read all the information below carefully and use the test mode until you are comfortable to make a real trade.**
 
