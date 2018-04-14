@@ -69,9 +69,10 @@ For information how to set up Telegram for notifications check here: https://www
      price at time of execution it will wait until the current ask price is lower or equal than the specified start price (could
      be used to trigger buy on potential bounce point)
    * Trail % (required), percentage difference compared to highest price till sell order is triggered
-   * Ratio (required, set to 0 if not desired), advanced feature, percentage increase of Trail % per percent profit compared to
-     enter price, think of it as adaptive trail percentage (e.g. Trail % = 1, Ratio = 0.2, current profit = 3.1%, effective
-     trail percentage = 1.6%)
+   * Ratio (required, set to 0 if not desired), advanced feature, percentage increase/decrease of Trail % per percent profit
+     compared to enter price, think of it as adaptive trail percentage (e.g. Trail % = 1, Ratio = 0.2, current profit = 3.1%,
+     effective trail percentage = 1.6%). Prefix value with '-' for negative value, this will decrease Trail % per percent
+     profit.
    * Confirmations (required), trader will track current ask price every second, after the amount of confirmations (seconds 
      where sell condition will be met) the sell order will be placed, think of it as the sensitivity of the trailing stop
 
