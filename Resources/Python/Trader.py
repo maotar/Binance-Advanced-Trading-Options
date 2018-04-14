@@ -29,6 +29,7 @@ api_key = sys.argv[10]
 api_secret = sys.argv[11]
 telegram_api = sys.argv[12]
 telegram_id = sys.argv[13]
+order_entry_price = sys.argv[14]
 
 if (api_key == "empty"):
 	api_key = ""
@@ -452,6 +453,24 @@ if __name__ == "__main__":
 		input()
 		sys.exit(0)
 
+	info = client.get_ticker(symbol=order_symbol)
+	start_bid = float(info.get("bidPrice"))
+
+	if order_stop_price >= start_bid and order_type != "Trailing Stop":
+		print(Fore.RED)
+		message = " Current bid price for " + order_symbol + " is equal or higher than specified stop/low price, \n this would trigger an immediate stop, please check your settings"
+		print(message)
+		input()
+		sys.exit()
+
+	if order_start_price <= start_bid and order_type != "Trailing Stop" and order_type != "Stop-Market":
+		print(Fore.RED)
+		message = " Current bid price for " + order_symbol + " is equal or lower than specified high price, \n this would trigger an immediate stop, please check your settings"
+		print(message)
+		input()
+		sys.exit()
+
+
 	# Call function to get Binance price and qty minimum values for symbol
 
 	price_precision,qty_precision,symbol_ticksize = get_symbol_info()
@@ -513,9 +532,9 @@ if __name__ == "__main__":
 			sys.exit(1)
 			
 	
-	# If mode is 'Test' or 'Reset' get current ask price and use that as 'buy' price		
+	# If mode is 'Test' get current ask price and use that as 'buy' price		
 
-	else:
+	elif order_mode == 'Test':
 		info = client.get_ticker(symbol=order_symbol)
 
 		# If mode is 'Test' start tracking from current ask price, simulating a buy. If not start tracking from current bid price
@@ -533,6 +552,17 @@ if __name__ == "__main__":
 		message = " Started tracking price for " + order_symbol + " at " + start_type + " price " + buy_avg_price_str
 		print (message)
 		print(Fore.WHITE)
+
+	# If mode is 'Reset' set Entry Price GUI field value as 'buy' price
+
+	elif order_mode == 'Reset':
+		buy_avg_price = float(order_entry_price)
+		buy_avg_price_str = order_entry_price
+		commission_asset = "BNB"
+		print(Fore.CYAN,end="\r", flush=True)
+		message = " Started tracking price for " + order_symbol + " at price " + buy_avg_price_str
+		print (message)
+		print(Fore.WHITE)
 	
 	if order_type == "Trailing Stop":	
 		bm = BinanceSocketManager(client)
@@ -546,7 +576,7 @@ if __name__ == "__main__":
 	
 
 
-	# If mode is 'Reset' check if symbol balance is enough for sell order for amount requested
+	#If mode is 'Reset' check if symbol balance is enough for sell order for amount requested
 
 	if order_mode == "Reset":
 		symbol_short = order_symbol[:-3]

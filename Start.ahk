@@ -353,10 +353,10 @@ Gui, Add, Edit, +border cBCBDC0 -E0x200 hwndAmountHnwd x120 y100 w130 vAmount
 
 Gui, Add, Text, x10 y131 vStartPriceLabel,  Start Price:
 GUI, Add, Checkbox, -E0x200 hwndStartCheck x97 y134 w13 h13 vStartCheck gSetCheck, %A_Space%
-Gui, Add, Edit, +border cBCBDC0 -E0x200 hwndStartPriceHnwd x120 y130 w130 vStartPrice
+Gui, Add, Edit, +border cBCBDC0 -E0x200 hwndStartPriceHnwd x120 y130 w130 Limit10 vStartPrice
 
 Gui, Add, Text, x10 y160 vStopPriceLabel,  Stop Price:
-Gui, Add, Edit, +border cBCBDC0 -E0x200 hwndStopPriceHnwd x120 y160 w130 vStopPrice
+Gui, Add, Edit, +border cBCBDC0 -E0x200 hwndStopPriceHnwd x120 y160 w130 Limit10 vStopPrice
 
 Gui, Add, Text, x10 y190,  Trail `%:
 Gui, Add, Edit, +border cBCBDC0 -E0x200 hwndTrailPercentageHnwd x120 y190 w130 Limit3 vTrailPercentage
@@ -369,12 +369,15 @@ Gui, Add, Edit, +border cBCBDC0 -E0x200 hwndConfirmationsHnwd x120 y250 w130 Num
 
 Gui, Add, Text, x10 y280, Mode :
 if (TestCheck = 1)
-  Gui, Add, DDL, x120 y280 w130 h100 vMode +border Choose1 hwndDropdown2  -E0x200 +0x0210, ---|Real|Test|Reset
+  Gui, Add, DDL, x120 y280 w130 h100 vMode +border Choose1 hwndDropdown2 gSetReset -E0x200 +0x0210, ---|Real|Test|Reset
 if (TestCheck = 0)
-  Gui, Add, DDL, x120 y280 w130 h100 vMode +border Choose1 hwndDropdown2  -E0x200 +0x0210, ---|Test
+  Gui, Add, DDL, x120 y280 w130 h100 vMode +border Choose1 hwndDropdown2 gSetReset -E0x200 +0x0210, ---|Test
 OD_Colors.Attach(Dropdown2, {T: 0xBCBDC0, B: 0x1A2132})
 
-Gui, Add, Button, x10 y325 w240 h28 Default gExecuteOrder hwndSubmitButton, Execute
+Gui, Add, Text, x10 y310,  Entry Price:
+Gui, Add, Edit, +border cBCBDC0 -E0x200 hwndEntryPriceHnwd x120 y310 w130 Limit10 vEntryPrice, 
+
+Gui, Add, Button, x10 y355 w240 h28 Default gExecuteOrder hwndSubmitButton, Execute
 Opt1 := [0, 0xFFFF007A, 0xFFFF007A, "White"]             ; normal background & text colors
 Opt2 := {2: 0xE5006D, 3: 0xE5006D, 4: "White"}           ; hot background & text colors 
 Opt3 := {4: "Black"}                                     ; pressed text color
@@ -384,6 +387,7 @@ If !ImageButton.Create(SubmitButton, Opt1, Opt2, Opt3)
 Gui,show, w270,Advanced Trading Options
 
 Gosub, SetType ; Disable controls on startup
+Gosub, SetReset ; Disable Entry Price control on startup
 return
 
 
@@ -420,6 +424,8 @@ if(!ValidateInput("TrailPercentageHnwd", "TrailPercentage", "Edit5"))
 if(!ValidateInput("TrailRatioHnwd", "TrailRatio", "Edit6"))
    ErrorVal = 1
 if(!ValidateInput("ConfirmationsHnwd", "Confirmations", "Edit7"))
+   ErrorVal = 1
+if(!ValidateInput("EntryPriceHnwd", "EntryPrice", "Edit8"))
    ErrorVal = 1
 
 ; Check if Symbol not empty, if not check against currently listed symbols
@@ -470,11 +476,14 @@ if (ErrorVal != 1)
   if (TrailPercentage = "")
     TrailPercentage = 0
   if (TrailRatio = "")
-    TrailRatio = 0  
+    TrailRatio = 0
+  if (EntryPrice = "")
+    EntryPrice = 0
+
 
   ; Call python trader with parameters from GUI input
 
-  Run, %A_ScriptDir%\Resources\Python\trader.py "%Type%" %Symbol% %Amount% %StartPrice% %StopPrice% %TrailPercentage% %TrailRatio% %Confirmations% %Mode% %Key% %Secret% %TKey% %TID%
+  Run, %A_ScriptDir%\Resources\Python\trader.py "%Type%" %Symbol% %Amount% %StartPrice% %StopPrice% %TrailPercentage% %TrailRatio% %Confirmations% %Mode% %Key% %Secret% %TKey% %TID% %EntryPrice%
   GuiControl, ChooseString, Mode, --- ; Resetting Mode selection so every trade execution is conscious action
   Sleep, 1000
   WinWaitActive , %Symbol%,,10 ; Wait for trader console window to be launched then set it to always on top
@@ -521,6 +530,23 @@ Else
 
 }
 
+SetReset:
+
+Gui, Submit, NoHide
+
+if (Mode = "Reset")
+{
+  if (Type != "---")
+    GuiControl, Enable, Edit8
+}
+Else
+{
+    GuiControl, Disable, Edit8
+    ControlSetText, Edit8,
+}
+
+return
+
 ; Subroutine to show/hide fields based on order type selection, reset form if no order type selected
 
 SetType:
@@ -552,7 +578,9 @@ GuiControl, Disable, StopPrice
 GuiControl, Disable, TrailPercentage
 GuiControl, Disable, TrailRatio
 GuiControl, Disable, Confirmations
+GuiControl, Disable, EntryPrice
 ControlSetText, Edit6,
+ControlSetText, Edit8,
 
 if (Type = "Trailing Stop")
 {
@@ -635,5 +663,68 @@ GetSymbols: ; run hidden python script to retrieve symbols currently listed on B
 
 Run, %A_ScriptDir%\Resources\Python\GetSymbols.pyw "%A_ScriptDir%"
 
+return
+
+; When 
+
+~LButton::
+if (A_PriorHotkey <> "~LButton" or A_TimeSincePriorHotkey > 400)
+{
+    KeyWait, LButton
+    return
+}
+
+IfWinExist, ahk_exe Binance.exe
+{
+  IfWinActive, Advanced Trading Options
+  {
+
+    WinGetText, WinText, ahk_exe Binance.exe
+
+    Needle = $
+
+    Loop, parse, WinText, `n,
+    {
+        
+      IfInString, A_LoopField, %Needle%
+      {
+        StringSplit, CurrentPrice, A_LoopField, %A_Space% 
+
+        ControlGet, StartActive, Enabled,,Edit3
+        ControlGet, StopActive, Enabled,,Edit4
+        ControlGet, EntryActive, Enabled,,Edit8
+        if (StartActive){
+          ControlSetText, Edit3, , Advanced Trading Options
+          ControlSend, Edit3, %CurrentPrice1%, Advanced Trading Options
+        }
+        if (StopActive){
+          ControlSetText, Edit4, , Advanced Trading Options
+          ControlSend, Edit4, %CurrentPrice1%, Advanced Trading Options
+        }
+        if (EntryActive){
+          ControlSetText, Edit8, , Advanced Trading Options
+          ControlSend, Edit8, %CurrentPrice1%, Advanced Trading Options
+        }
+        break
+      }
+    }
+
+    Needle = BTC
+
+    Loop, parse, WinText, `n,
+    {   
+      IfInString, A_LoopField, %Needle%
+      {
+        StringSplit, Symbol, A_LoopField,/
+        ControlGet, SymbolActive, Enabled,,Edit1
+        if (SymbolActive){
+          ControlSetText, Edit1, , Advanced Trading Options
+          ControlSend, Edit1, %Symbol1%%Symbol2%, Advanced Trading Options
+        }
+        break
+      }
+    }
+  }
+}
 return
 
