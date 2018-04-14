@@ -10,6 +10,8 @@ Status :
 * 7-March-2018 - Initial commit, GUI available for feedback/testing
 * 19-March-2018 - Trader available for testing
 * 23-March-2018 - Stop-HiLo and Trailing HiLo trading types added, see below for descriptions
+* 14-April-2018 - Added 'Entry Price' field for 'Reset' mode, doubleclick in GUI now pulls symbol info from Binance desktop     
+client, added price entry error catching to trader
 
 ## Introduction ##
 
