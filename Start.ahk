@@ -359,10 +359,10 @@ Gui, Add, Text, x10 y160 vStopPriceLabel,  Stop Price:
 Gui, Add, Edit, +border cBCBDC0 -E0x200 hwndStopPriceHnwd x120 y160 w130 Limit10 vStopPrice
 
 Gui, Add, Text, x10 y190,  Trail `%:
-Gui, Add, Edit, +border cBCBDC0 -E0x200 hwndTrailPercentageHnwd x120 y190 w130 Limit3 vTrailPercentage
+Gui, Add, Edit, +border cBCBDC0 -E0x200 hwndTrailPercentageHnwd x120 y190 w130 Limit2 vTrailPercentage ; changed size limit to 2 should be no need for more than 99% trail
 
 Gui, Add, Text, x10 y220,  Ratio:
-Gui, Add, Edit, +border cBCBDC0 -E0x200 hwndTrailRatioHnwd x120 y220 w130 Limit3 vTrailRatio, 0
+Gui, Add, Edit, +border cBCBDC0 -E0x200 hwndTrailRatioHnwd x120 y220 w130 Limit4 vTrailRatio, 0 ; changed size limit to 4 to enable negative decimal values
 
 Gui, Add, Text, x10 y250,  Confirmations:
 Gui, Add, Edit, +border cBCBDC0 -E0x200 hwndConfirmationsHnwd x120 y250 w130 Number Limit2 vConfirmations
